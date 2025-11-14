@@ -38,11 +38,15 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
-
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+# PDF Documents schema
+class Document(BaseModel):
+    """
+    Stores uploaded PDF metadata and extracted text
+    Collection name: "document"
+    """
+    filename: str = Field(..., description="Original filename")
+    content_type: str = Field(..., description="MIME type, e.g., application/pdf")
+    size: int = Field(..., ge=0, description="File size in bytes")
+    extracted_text: str = Field(..., description="Extracted or OCR text content")
+    ocr_used: bool = Field(False, description="Whether OCR was used (vs digital text extraction)")
+    file_id: Optional[str] = Field(None, description="GridFS file id where the PDF is stored")
